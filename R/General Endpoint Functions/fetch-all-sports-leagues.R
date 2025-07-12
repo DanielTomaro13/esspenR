@@ -5,6 +5,7 @@
 #' This uses the newer ESPN Core API endpoints that are currently working.
 #'
 #' @param include_leagues Logical. If TRUE, fetches leagues for each sport (default: TRUE)
+#' @param raw Logical, default FALSE. If TRUE, returns full parsed JSON data.
 #' @return A data.frame with sport and league details combined
 #' @export
 #'
@@ -26,7 +27,7 @@
 #' basketball_data <- all_data[all_data$slug == "basketball", ]
 #' print(basketball_data)
 #' }
-fetch_all_sports_and_leagues <- function(include_leagues = TRUE) {
+fetch_all_sports_and_leagues <- function(include_leagues = TRUE, raw = FALSE) {
   # Validate input
   if (!is.logical(include_leagues) || length(include_leagues) != 1) {
     stop("include_leagues must be a single logical value (TRUE or FALSE)")
@@ -49,6 +50,7 @@ fetch_all_sports_and_leagues <- function(include_leagues = TRUE) {
     stop("No sports items found in ESPN response")
   }
 
+
   # Extract sport references and fetch detailed info for each
   sport_refs <- sports_data$items$`$ref`
 
@@ -65,6 +67,8 @@ fetch_all_sports_and_leagues <- function(include_leagues = TRUE) {
 
       sport_data <- jsonlite::fromJSON(httr::content(resp, as = "text", encoding = "UTF-8"),
                                        flatten = TRUE)
+
+      if (isTRUE(raw)) return(sports_data)
 
       # Extract basic sport info
       sport_info <- data.frame(
@@ -121,6 +125,8 @@ fetch_all_sports_and_leagues <- function(include_leagues = TRUE) {
 
       league_data <- jsonlite::fromJSON(httr::content(league_resp, as = "text", encoding = "UTF-8"),
                                         flatten = TRUE)
+
+      if (isTRUE(raw)) return(league_data)
 
       if (is.null(league_data$items) || length(league_data$items) == 0) {
         return(NULL)
@@ -202,6 +208,7 @@ fetch_all_sports_and_leagues <- function(include_leagues = TRUE) {
 #' This is a helper function that focuses on a single sport.
 #'
 #' @param sport Character. Sport slug, e.g. 'basketball', 'football', 'soccer'
+#' @param raw Logical, default FALSE. If TRUE, returns full parsed JSON data.
 #' @return A data.frame with leagues info (id, name, abbreviation, slug)
 #' @export
 #'
@@ -238,6 +245,8 @@ fetch_sport_leagues <- function(sport) {
 
   sport_data <- jsonlite::fromJSON(httr::content(sport_resp, as = "text", encoding = "UTF-8"),
                                    flatten = TRUE)
+
+  if (isTRUE(raw)) return(sport_data)
 
   # Check if leagues reference exists
   if (is.null(sport_data$leagues$`$ref`)) {
@@ -290,6 +299,8 @@ fetch_sport_leagues <- function(sport) {
       league_detail <- jsonlite::fromJSON(httr::content(resp, as = "text", encoding = "UTF-8"),
                                           flatten = TRUE)
 
+      if (isTRUE(raw)) return(league_detail)
+
       return(data.frame(
         sport = sport,
         league_id = if (is.null(league_detail$id)) NA_character_ else as.character(league_detail$id),
@@ -332,6 +343,8 @@ fetch_sport_leagues <- function(sport) {
 #' Gets a list of all sports available from ESPN's Core API.
 #' This is a helper function that focuses only on sports.
 #'
+#' @param raw Logical, default FALSE. If TRUE, returns full parsed JSON data.
+#'
 #' @return A data.frame with sport details (id, name, slug, uid, etc)
 #' @export
 #'
@@ -363,6 +376,8 @@ fetch_all_sports <- function() {
   if (is.null(data$items)) {
     stop("No sports items found in ESPN response")
   }
+
+  if (isTRUE(raw)) return(data)
 
   # Extract sport references and fetch detailed info for each
   sport_refs <- data$items$`$ref`

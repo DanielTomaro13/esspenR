@@ -1,52 +1,51 @@
 #' ESPN Search (v2 API)
 #'
 #' @description
-#' Search across players, teams, and articles using ESPN's search v2 API.
-#' Returns structured data about ESPN content matching the search query.
+#' Searches across players, teams, and articles using ESPN's search v2 API,
+#' returning structured data matching the query.
 #'
-#' @param query Character string. Search query (e.g., "lebron", "warriors").
-#' @param limit Integer. Maximum number of results to return per category. Default is 10.
-#' @param type Character. Return type: 'tibble' (default) returns cleaned data frame,
-#'   'raw' returns the full nested list from the API.
-#' @param timeout Numeric. Timeout in seconds for the HTTP request. Default is 10.
+#' @param query Character. Search query (e.g. "lebron", "warriors").
+#' @param limit Integer. Maximum number of results per category. Default is 10.
+#' @param raw Logical. If TRUE, returns the full parsed JSON data. Default is FALSE.
+#' @param timeout Numeric. Request timeout in seconds. Default is 10.
 #'
 #' @return
-#' If type = 'tibble': A tibble with columns:
+#' If `raw = TRUE`, returns a list with the full JSON response.
+#' Otherwise, a tibble with columns:
 #' \describe{
-#'   \item{type}{Type of content (e.g., "player", "team", "article")}
-#'   \item{name}{Display name of the result}
-#'   \item{description}{Description text (if available)}
-#'   \item{subtitle}{Subtitle or additional context}
-#'   \item{link}{Web URL link}
+#'   \item{type}{Content type (e.g. "player", "team", "article")}
+#'   \item{name}{Display name}
+#'   \item{description}{Description text if available}
+#'   \item{subtitle}{Additional context}
+#'   \item{link}{URL to ESPN page}
 #'   \item{id}{Unique identifier}
 #'   \item{category}{Search result category}
 #' }
-#' If type = 'raw': List containing the full API response.
 #'
 #' @details
-#' This function uses ESPN's undocumented search API. Since this is an unofficial
-#' endpoint, it may change without notice. The function includes robust error
-#' handling and will return an empty tibble if no results are found.
+#' Uses ESPN's undocumented search API. As it is unofficial, the endpoint may
+#' change without notice. Includes robust error handling and returns an
+#' empty tibble if no results are found.
 #'
 #' @examples
 #' \dontrun{
 #' # Search for a player
-#' lebron_results <- fetch_espn_search("lebron james")
+#' fetch_detailed_search("lebron james")
 #'
-#' # Search for a team with limit
-#' warriors_results <- fetch_espn_search("golden state warriors", limit = 5)
+#' # Search for a team with a smaller limit
+#' fetch_detailed_search("golden state warriors", limit = 5)
 #'
-#' # Get raw API response
-#' raw_data <- fetch_espn_search("nfl", type = "raw")
+#' # Get full raw JSON response
+#' fetch_detailed_search("nfl", raw = TRUE)
 #' }
 #'
-#' @export
 #' @importFrom httr GET status_code content timeout
 #' @importFrom jsonlite fromJSON
 #' @importFrom tibble tibble
 #' @importFrom utils URLencode
 #' @importFrom cli cli_abort cli_warn cli_inform
-fetch_espn_search <- function(query, limit = 10, type = c("tibble", "raw"), timeout = 10) {
+#' @export
+fetch_detailed_search <- function(query, limit = 10, raw = FALSE, timeout = 10) {
 
   # Input validation
   if (missing(query) || !is.character(query) || length(query) != 1 || nchar(query) == 0) {
@@ -56,8 +55,6 @@ fetch_espn_search <- function(query, limit = 10, type = c("tibble", "raw"), time
   if (!is.numeric(limit) || length(limit) != 1 || limit < 1 || limit > 100) {
     cli::cli_abort("Limit must be a single integer between 1 and 100.")
   }
-
-  type <- match.arg(type)
 
   if (!is.numeric(timeout) || length(timeout) != 1 || timeout < 1) {
     cli::cli_abort("Timeout must be a positive number.")
@@ -99,7 +96,7 @@ fetch_espn_search <- function(query, limit = 10, type = c("tibble", "raw"), time
   })
 
   # Return raw data if requested
-  if (type == "raw") {
+  if (raw == TRUE) {
     return(data)
   }
 
