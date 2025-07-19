@@ -1,4 +1,4 @@
-#' Safe nested data extraction helper function for nba teams
+#' Safe nested data extraction helper function for mens_college_basketball teams
 #'
 #' Safely extracts values from nested list structures with error handling
 #' @param data Nested list or data structure
@@ -6,7 +6,7 @@
 #' @param default Default value to return if path doesn't exist
 #' @return Value at the specified path or default value
 #' @keywords internal
-extract_nested_nba_teams <- function(data, path, default = NA) {
+extract_nested_mens_college_basketball_teams <- function(data, path, default = NA) {
   tryCatch({
     result <- data
     for (key in path) {
@@ -21,15 +21,15 @@ extract_nested_nba_teams <- function(data, path, default = NA) {
   })
 }
 
-#' Create nba teams data frame from Site API response
+#' Create mens_college_basketball teams data frame from Site API response
 #'
 #' Processes raw JSON response from ESPN Site API into structured data frame
-#' containing nba teams information
+#' containing mens_college_basketball teams information
 #'
 #' @param data Raw JSON response from ESPN Site API teams endpoint
 #' @return Data frame with teams information
 #' @keywords internal
-create_nba_teams_dataset <- function(data) {
+create_mens_college_basketball_teams_dataset <- function(data) {
 
   # Initialize teams data frame
   teams_df <- data.frame(
@@ -118,19 +118,19 @@ create_nba_teams_dataset <- function(data) {
     }
 
     # Basic team information
-    team_id <- extract_nested_nba_teams(team, c("id"), NA_character_)
-    team_uid <- extract_nested_nba_teams(team, c("uid"), NA_character_)
-    team_slug <- extract_nested_nba_teams(team, c("slug"), NA_character_)
-    team_abbreviation <- extract_nested_nba_teams(team, c("abbreviation"), NA_character_)
-    team_display_name <- extract_nested_nba_teams(team, c("displayName"), NA_character_)
-    team_short_display_name <- extract_nested_nba_teams(team, c("shortDisplayName"), NA_character_)
-    team_name <- extract_nested_nba_teams(team, c("name"), NA_character_)
-    team_nickname <- extract_nested_nba_teams(team, c("nickname"), NA_character_)
-    team_location <- extract_nested_nba_teams(team, c("location"), NA_character_)
-    team_color <- extract_nested_nba_teams(team, c("color"), NA_character_)
-    team_alternate_color <- extract_nested_nba_teams(team, c("alternateColor"), NA_character_)
-    team_is_active <- extract_nested_nba_teams(team, c("isActive"), "true")
-    team_is_all_star <- extract_nested_nba_teams(team, c("isAllStar"), "false")
+    team_id <- extract_nested_mens_college_basketball_teams(team, c("id"), NA_character_)
+    team_uid <- extract_nested_mens_college_basketball_teams(team, c("uid"), NA_character_)
+    team_slug <- extract_nested_mens_college_basketball_teams(team, c("slug"), NA_character_)
+    team_abbreviation <- extract_nested_mens_college_basketball_teams(team, c("abbreviation"), NA_character_)
+    team_display_name <- extract_nested_mens_college_basketball_teams(team, c("displayName"), NA_character_)
+    team_short_display_name <- extract_nested_mens_college_basketball_teams(team, c("shortDisplayName"), NA_character_)
+    team_name <- extract_nested_mens_college_basketball_teams(team, c("name"), NA_character_)
+    team_nickname <- extract_nested_mens_college_basketball_teams(team, c("nickname"), NA_character_)
+    team_location <- extract_nested_mens_college_basketball_teams(team, c("location"), NA_character_)
+    team_color <- extract_nested_mens_college_basketball_teams(team, c("color"), NA_character_)
+    team_alternate_color <- extract_nested_mens_college_basketball_teams(team, c("alternateColor"), NA_character_)
+    team_is_active <- extract_nested_mens_college_basketball_teams(team, c("isActive"), "true")
+    team_is_all_star <- extract_nested_mens_college_basketball_teams(team, c("isAllStar"), "false")
 
     # Logo information - get both regular and dark logos
     team_logo_href <- NA_character_
@@ -139,18 +139,18 @@ create_nba_teams_dataset <- function(data) {
     team_logo_height <- NA_character_
     team_logo_dark_href <- NA_character_
 
-    logos <- extract_nested_nba_teams(team, c("logos"), list())
+    logos <- extract_nested_mens_college_basketball_teams(team, c("logos"), list())
     if (length(logos) > 0) {
       for (logo in logos) {
-        logo_rel <- extract_nested_nba_teams(logo, c("rel"), list())
+        logo_rel <- extract_nested_mens_college_basketball_teams(logo, c("rel"), list())
         if (length(logo_rel) > 0) {
           if ("default" %in% logo_rel || "full" %in% logo_rel) {
-            team_logo_href <- extract_nested_nba_teams(logo, c("href"), team_logo_href)
-            team_logo_alt <- extract_nested_nba_teams(logo, c("alt"), team_logo_alt)
-            team_logo_width <- extract_nested_nba_teams(logo, c("width"), team_logo_width)
-            team_logo_height <- extract_nested_nba_teams(logo, c("height"), team_logo_height)
+            team_logo_href <- extract_nested_mens_college_basketball_teams(logo, c("href"), team_logo_href)
+            team_logo_alt <- extract_nested_mens_college_basketball_teams(logo, c("alt"), team_logo_alt)
+            team_logo_width <- extract_nested_mens_college_basketball_teams(logo, c("width"), team_logo_width)
+            team_logo_height <- extract_nested_mens_college_basketball_teams(logo, c("height"), team_logo_height)
           } else if ("dark" %in% logo_rel) {
-            team_logo_dark_href <- extract_nested_nba_teams(logo, c("href"), team_logo_dark_href)
+            team_logo_dark_href <- extract_nested_mens_college_basketball_teams(logo, c("href"), team_logo_dark_href)
           }
         }
       }
@@ -164,26 +164,26 @@ create_nba_teams_dataset <- function(data) {
     conference_abbreviation <- NA_character_
 
     # Try different paths for conference
-    conference_info <- extract_nested_nba_teams(team, c("conference"), list())
+    conference_info <- extract_nested_mens_college_basketball_teams(team, c("conference"), list())
     if (length(conference_info) > 0) {
-      conference_id <- extract_nested_nba_teams(conference_info, c("id"), NA_character_)
-      conference_name <- extract_nested_nba_teams(conference_info, c("name"), NA_character_)
-      conference_short_name <- extract_nested_nba_teams(conference_info, c("shortName"), NA_character_)
-      conference_uid <- extract_nested_nba_teams(conference_info, c("uid"), NA_character_)
-      conference_abbreviation <- extract_nested_nba_teams(conference_info, c("abbreviation"), NA_character_)
+      conference_id <- extract_nested_mens_college_basketball_teams(conference_info, c("id"), NA_character_)
+      conference_name <- extract_nested_mens_college_basketball_teams(conference_info, c("name"), NA_character_)
+      conference_short_name <- extract_nested_mens_college_basketball_teams(conference_info, c("shortName"), NA_character_)
+      conference_uid <- extract_nested_mens_college_basketball_teams(conference_info, c("uid"), NA_character_)
+      conference_abbreviation <- extract_nested_mens_college_basketball_teams(conference_info, c("abbreviation"), NA_character_)
     } else {
       # Try groups array for conference information
-      groups <- extract_nested_nba_teams(team, c("groups"), list())
+      groups <- extract_nested_mens_college_basketball_teams(team, c("groups"), list())
       if (length(groups) > 0) {
         # Find conference group
         for (group in groups) {
-          is_conf_group <- extract_nested_nba_teams(group, c("isConferenceGroup"), "false")
+          is_conf_group <- extract_nested_mens_college_basketball_teams(group, c("isConferenceGroup"), "false")
           if (is_conf_group == "true") {
-            conference_id <- extract_nested_nba_teams(group, c("id"), NA_character_)
-            conference_name <- extract_nested_nba_teams(group, c("name"), NA_character_)
-            conference_short_name <- extract_nested_nba_teams(group, c("shortName"), NA_character_)
-            conference_uid <- extract_nested_nba_teams(group, c("uid"), NA_character_)
-            conference_abbreviation <- extract_nested_nba_teams(group, c("abbreviation"), NA_character_)
+            conference_id <- extract_nested_mens_college_basketball_teams(group, c("id"), NA_character_)
+            conference_name <- extract_nested_mens_college_basketball_teams(group, c("name"), NA_character_)
+            conference_short_name <- extract_nested_mens_college_basketball_teams(group, c("shortName"), NA_character_)
+            conference_uid <- extract_nested_mens_college_basketball_teams(group, c("uid"), NA_character_)
+            conference_abbreviation <- extract_nested_mens_college_basketball_teams(group, c("abbreviation"), NA_character_)
             break
           }
         }
@@ -198,26 +198,26 @@ create_nba_teams_dataset <- function(data) {
     division_abbreviation <- NA_character_
 
     # Try different paths for division
-    division_info <- extract_nested_nba_teams(team, c("division"), list())
+    division_info <- extract_nested_mens_college_basketball_teams(team, c("division"), list())
     if (length(division_info) > 0) {
-      division_id <- extract_nested_nba_teams(division_info, c("id"), NA_character_)
-      division_name <- extract_nested_nba_teams(division_info, c("name"), NA_character_)
-      division_short_name <- extract_nested_nba_teams(division_info, c("shortName"), NA_character_)
-      division_uid <- extract_nested_nba_teams(division_info, c("uid"), NA_character_)
-      division_abbreviation <- extract_nested_nba_teams(division_info, c("abbreviation"), NA_character_)
+      division_id <- extract_nested_mens_college_basketball_teams(division_info, c("id"), NA_character_)
+      division_name <- extract_nested_mens_college_basketball_teams(division_info, c("name"), NA_character_)
+      division_short_name <- extract_nested_mens_college_basketball_teams(division_info, c("shortName"), NA_character_)
+      division_uid <- extract_nested_mens_college_basketball_teams(division_info, c("uid"), NA_character_)
+      division_abbreviation <- extract_nested_mens_college_basketball_teams(division_info, c("abbreviation"), NA_character_)
     } else {
       # Try groups array for division information
-      groups <- extract_nested_nba_teams(team, c("groups"), list())
+      groups <- extract_nested_mens_college_basketball_teams(team, c("groups"), list())
       if (length(groups) > 0) {
         # Find division group (not conference group)
         for (group in groups) {
-          is_conf_group <- extract_nested_nba_teams(group, c("isConferenceGroup"), "false")
+          is_conf_group <- extract_nested_mens_college_basketball_teams(group, c("isConferenceGroup"), "false")
           if (is_conf_group == "false") {
-            division_id <- extract_nested_nba_teams(group, c("id"), NA_character_)
-            division_name <- extract_nested_nba_teams(group, c("name"), NA_character_)
-            division_short_name <- extract_nested_nba_teams(group, c("shortName"), NA_character_)
-            division_uid <- extract_nested_nba_teams(group, c("uid"), NA_character_)
-            division_abbreviation <- extract_nested_nba_teams(group, c("abbreviation"), NA_character_)
+            division_id <- extract_nested_mens_college_basketball_teams(group, c("id"), NA_character_)
+            division_name <- extract_nested_mens_college_basketball_teams(group, c("name"), NA_character_)
+            division_short_name <- extract_nested_mens_college_basketball_teams(group, c("shortName"), NA_character_)
+            division_uid <- extract_nested_mens_college_basketball_teams(group, c("uid"), NA_character_)
+            division_abbreviation <- extract_nested_mens_college_basketball_teams(group, c("abbreviation"), NA_character_)
             break
           }
         }
@@ -235,24 +235,24 @@ create_nba_teams_dataset <- function(data) {
     venue_country_code <- NA_character_
     venue_indoor <- NA_character_
 
-    venue_info <- extract_nested_nba_teams(team, c("venue"), list())
+    venue_info <- extract_nested_mens_college_basketball_teams(team, c("venue"), list())
     if (length(venue_info) > 0) {
-      venue_id <- extract_nested_nba_teams(venue_info, c("id"), NA_character_)
-      venue_name <- extract_nested_nba_teams(venue_info, c("shortName"), NA_character_)
-      venue_full_name <- extract_nested_nba_teams(venue_info, c("fullName"), NA_character_)
+      venue_id <- extract_nested_mens_college_basketball_teams(venue_info, c("id"), NA_character_)
+      venue_name <- extract_nested_mens_college_basketball_teams(venue_info, c("shortName"), NA_character_)
+      venue_full_name <- extract_nested_mens_college_basketball_teams(venue_info, c("fullName"), NA_character_)
       if (is.na(venue_name)) {
-        venue_name <- extract_nested_nba_teams(venue_info, c("name"), NA_character_)
+        venue_name <- extract_nested_mens_college_basketball_teams(venue_info, c("name"), NA_character_)
       }
-      venue_capacity <- extract_nested_nba_teams(venue_info, c("capacity"), NA_character_)
-      venue_indoor <- extract_nested_nba_teams(venue_info, c("indoor"), "true")  # nba is typically indoor
+      venue_capacity <- extract_nested_mens_college_basketball_teams(venue_info, c("capacity"), NA_character_)
+      venue_indoor <- extract_nested_mens_college_basketball_teams(venue_info, c("indoor"), "true")  # mens_college_basketball is typically indoor
 
       # Address information
-      address_info <- extract_nested_nba_teams(venue_info, c("address"), list())
+      address_info <- extract_nested_mens_college_basketball_teams(venue_info, c("address"), list())
       if (length(address_info) > 0) {
-        venue_city <- extract_nested_nba_teams(address_info, c("city"), NA_character_)
-        venue_state <- extract_nested_nba_teams(address_info, c("state"), NA_character_)
-        venue_zip_code <- extract_nested_nba_teams(address_info, c("zipCode"), NA_character_)
-        venue_country_code <- extract_nested_nba_teams(address_info, c("countryCode"), NA_character_)
+        venue_city <- extract_nested_mens_college_basketball_teams(address_info, c("city"), NA_character_)
+        venue_state <- extract_nested_mens_college_basketball_teams(address_info, c("state"), NA_character_)
+        venue_zip_code <- extract_nested_mens_college_basketball_teams(address_info, c("zipCode"), NA_character_)
+        venue_country_code <- extract_nested_mens_college_basketball_teams(address_info, c("countryCode"), NA_character_)
       }
     }
 
@@ -307,17 +307,17 @@ create_nba_teams_dataset <- function(data) {
   return(teams_df)
 }
 
-#' Fetch nba teams using Site API
+#' Fetch mens_college_basketball teams using Site API
 #'
-#' Retrieves comprehensive nba teams information from ESPN's Site API.
+#' Retrieves comprehensive mens_college_basketball teams information from ESPN's Site API.
 #' The function fetches detailed team data including identities, conferences,
 #' divisions, venues, and branding information.
 #'
 #' @param raw Logical. If TRUE, assigns raw JSON response to global environment
-#'   as 'nba_teams_raw' for debugging purposes (default: FALSE).
+#'   as 'mens_college_basketball_teams_raw' for debugging purposes (default: FALSE).
 #'
 #' @return Invisibly returns the processed data frame. The main purpose is global
-#'   environment assignment of \code{nba_teams} containing:
+#'   environment assignment of \code{mens_college_basketball_teams} containing:
 #'   \itemize{
 #'     \item Team identity: ID, UID, slug, abbreviation, names, nickname, location
 #'     \item Team branding: colors, logos (regular and dark versions)
@@ -328,7 +328,7 @@ create_nba_teams_dataset <- function(data) {
 #'   }
 #'
 #' @details
-#' The function creates a comprehensive data frame with all nba teams information.
+#' The function creates a comprehensive data frame with all mens_college_basketball teams information.
 #' This provides complete team data for analysis, visualization, and API reference.
 #'
 #' **Team Identity**:
@@ -342,7 +342,7 @@ create_nba_teams_dataset <- function(data) {
 #' \itemize{
 #'   \item Conference: Eastern or Western Conference details
 #'   \item Division: Atlantic, Central, Southeast, Northwest, Pacific, Southwest
-#'   \item Structure: hierarchical organization within nba
+#'   \item Structure: hierarchical organization within mens_college_basketball
 #' }
 #'
 #' **Team Branding**:
@@ -355,33 +355,33 @@ create_nba_teams_dataset <- function(data) {
 #' \itemize{
 #'   \item Arena: name, full name, capacity
 #'   \item Location: city, state, zip code, country code
-#'   \item Features: indoor status (typically true for nba)
+#'   \item Features: indoor status (typically true for mens_college_basketball)
 #' }
 #'
 #' @examples
 #' \dontrun{
-#' # Get all nba teams
-#' fetch_nba_teams()
+#' # Get all mens_college_basketball teams
+#' fetch_mens_college_basketball_teams()
 #'
 #' # Check the data
-#' head(nba_teams)
-#' str(nba_teams)
+#' head(mens_college_basketball_teams)
+#' str(mens_college_basketball_teams)
 #'
 #' # View team identity and branding
-#' team_identity <- nba_teams[, c("team_abbreviation", "team_display_name",
+#' team_identity <- mens_college_basketball_teams[, c("team_abbreviation", "team_display_name",
 #'                               "team_location", "team_color", "team_alternate_color")]
 #' print("Team identity:")
 #' print(team_identity)
 #'
 #' # View conference and division breakdown
-#' conf_division <- nba_teams[, c("team_abbreviation", "team_display_name",
+#' conf_division <- mens_college_basketball_teams[, c("team_abbreviation", "team_display_name",
 #'                               "conference_name", "division_name")]
 #' print("Conference and division breakdown:")
 #' print(conf_division)
 #'
 #' # Analyze conferences
 #' if(require(dplyr, quietly = TRUE)) {
-#'   conference_breakdown <- nba_teams %>%
+#'   conference_breakdown <- mens_college_basketball_teams %>%
 #'     filter(!is.na(conference_name) & conference_name != "") %>%
 #'     count(conference_name, sort = TRUE)
 #'
@@ -389,7 +389,7 @@ create_nba_teams_dataset <- function(data) {
 #'   print(conference_breakdown)
 #'
 #'   # Division breakdown
-#'   division_breakdown <- nba_teams %>%
+#'   division_breakdown <- mens_college_basketball_teams %>%
 #'     filter(!is.na(division_name) & division_name != "") %>%
 #'     count(conference_name, division_name) %>%
 #'     arrange(conference_name, division_name)
@@ -399,7 +399,7 @@ create_nba_teams_dataset <- function(data) {
 #' }
 #'
 #' # Venue analysis
-#' venue_info <- nba_teams[!is.na(nba_teams$venue_full_name),
+#' venue_info <- mens_college_basketball_teams[!is.na(mens_college_basketball_teams$venue_full_name),
 #'                        c("team_abbreviation", "venue_full_name", "venue_capacity",
 #'                          "venue_city", "venue_state")]
 #'
@@ -412,8 +412,8 @@ create_nba_teams_dataset <- function(data) {
 #' }
 #'
 #' # Eastern Conference teams
-#' eastern_teams <- nba_teams[nba_teams$conference_name == "Eastern Conference" &
-#'                           !is.na(nba_teams$conference_name), ]
+#' eastern_teams <- mens_college_basketball_teams[mens_college_basketball_teams$conference_name == "Eastern Conference" &
+#'                           !is.na(mens_college_basketball_teams$conference_name), ]
 #'
 #' if(nrow(eastern_teams) > 0) {
 #'   print("Eastern Conference teams:")
@@ -421,8 +421,8 @@ create_nba_teams_dataset <- function(data) {
 #' }
 #'
 #' # Western Conference teams
-#' western_teams <- nba_teams[nba_teams$conference_name == "Western Conference" &
-#'                           !is.na(nba_teams$conference_name), ]
+#' western_teams <- mens_college_basketball_teams[mens_college_basketball_teams$conference_name == "Western Conference" &
+#'                           !is.na(mens_college_basketball_teams$conference_name), ]
 #'
 #' if(nrow(western_teams) > 0) {
 #'   print("Western Conference teams:")
@@ -430,7 +430,7 @@ create_nba_teams_dataset <- function(data) {
 #' }
 #'
 #' # Team colors analysis
-#' colors_data <- nba_teams[!is.na(nba_teams$team_color), ]
+#' colors_data <- mens_college_basketball_teams[!is.na(mens_college_basketball_teams$team_color), ]
 #' if(nrow(colors_data) > 0) {
 #'   print("Team colors:")
 #'   for(i in 1:min(10, nrow(colors_data))) {
@@ -444,18 +444,18 @@ create_nba_teams_dataset <- function(data) {
 #' }
 #'
 #' # Find teams with largest arenas
-#' large_venues <- nba_teams[!is.na(nba_teams$venue_capacity) & nba_teams$venue_capacity != "", ]
+#' large_venues <- mens_college_basketball_teams[!is.na(mens_college_basketball_teams$venue_capacity) & mens_college_basketball_teams$venue_capacity != "", ]
 #' if(nrow(large_venues) > 0) {
 #'   large_venues$capacity_num <- as.numeric(large_venues$venue_capacity)
 #'   large_venues <- large_venues[order(-large_venues$capacity_num), ]
 #'
-#'   print("Largest nba arenas:")
+#'   print("Largest mens_college_basketball arenas:")
 #'   print(head(large_venues[, c("team_abbreviation", "venue_full_name", "capacity_num")], 5))
 #' }
 #'
 #' # Geographic distribution
 #' if(require(dplyr, quietly = TRUE)) {
-#'   geo_distribution <- nba_teams %>%
+#'   geo_distribution <- mens_college_basketball_teams %>%
 #'     filter(!is.na(venue_state) & venue_state != "") %>%
 #'     count(venue_state, sort = TRUE)
 #'
@@ -464,7 +464,7 @@ create_nba_teams_dataset <- function(data) {
 #' }
 #'
 #' # Get team ID for API calls
-#' lakers_info <- nba_teams[nba_teams$team_abbreviation == "LAL", ]
+#' lakers_info <- mens_college_basketball_teams[mens_college_basketball_teams$team_abbreviation == "LAL", ]
 #' if(nrow(lakers_info) > 0) {
 #'   cat(sprintf("Lakers team ID: %s\n", lakers_info$team_id))
 #'   cat(sprintf("Lakers venue: %s\n", lakers_info$venue_full_name))
@@ -472,14 +472,14 @@ create_nba_teams_dataset <- function(data) {
 #' }
 #'
 #' @export
-fetch_nba_teams <- function(raw = FALSE) {
+fetch_mens_college_basketball_teams <- function(raw = FALSE) {
 
   # Build API URL
-  url <- "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams"
+  url <- "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams"
 
   # Fetch and parse data
   tryCatch({
-    message("Fetching all nba teams...")
+    message("Fetching all mens_college_basketball teams...")
 
     resp <- httr::GET(url, httr::timeout(30))
 
@@ -494,8 +494,8 @@ fetch_nba_teams <- function(raw = FALSE) {
 
     # Handle raw data assignment for debugging
     if (isTRUE(raw)) {
-      assign("nba_teams_raw", data, envir = .GlobalEnv)
-      message("Raw nba teams data assigned to: nba_teams_raw")
+      assign("mens_college_basketball_teams_raw", data, envir = .GlobalEnv)
+      message("Raw mens_college_basketball teams data assigned to: mens_college_basketball_teams_raw")
       message("Data structure preview:")
 
       # Show available sections
@@ -505,7 +505,7 @@ fetch_nba_teams <- function(raw = FALSE) {
       # Try to find teams data and show its structure
       teams_data <- list()
       if ("sports" %in% names(data)) {
-        teams_data <- extract_nested_nba_teams(data, c("sports", 1, "leagues", 1, "teams"), list())
+        teams_data <- extract_nested_mens_college_basketball_teams(data, c("sports", 1, "leagues", 1, "teams"), list())
         if (length(teams_data) > 0) {
           message("- Found teams data via sports path")
         }
@@ -524,9 +524,9 @@ fetch_nba_teams <- function(raw = FALSE) {
           if ("team" %in% names(first_team)) {
             first_team <- first_team$team
           }
-          team_name <- extract_nested_nba_teams(first_team, c("displayName"), "Unknown")
-          team_conf <- extract_nested_nba_teams(first_team, c("conference", "name"), "Unknown")
-          venue_name <- extract_nested_nba_teams(first_team, c("venue", "fullName"), "Unknown")
+          team_name <- extract_nested_mens_college_basketball_teams(first_team, c("displayName"), "Unknown")
+          team_conf <- extract_nested_mens_college_basketball_teams(first_team, c("conference", "name"), "Unknown")
+          venue_name <- extract_nested_mens_college_basketball_teams(first_team, c("venue", "fullName"), "Unknown")
 
           message(sprintf("- Sample team: %s", team_name))
           message(sprintf("- Sample conference: %s", team_conf))
@@ -540,15 +540,15 @@ fetch_nba_teams <- function(raw = FALSE) {
     }
 
     # Create teams dataset
-    teams_df <- create_nba_teams_dataset(data)
+    teams_df <- create_mens_college_basketball_teams_dataset(data)
 
     # Assign to global environment
-    assign("nba_teams", teams_df, envir = .GlobalEnv)
+    assign("mens_college_basketball_teams", teams_df, envir = .GlobalEnv)
 
     # Summary message
     total_teams <- nrow(teams_df)
 
-    message(sprintf("nba teams assigned to: nba_teams (%d teams)", total_teams))
+    message(sprintf("mens_college_basketball teams assigned to: mens_college_basketball_teams (%d teams)", total_teams))
 
     if (total_teams > 0) {
       # Count active vs inactive teams
@@ -611,6 +611,6 @@ fetch_nba_teams <- function(raw = FALSE) {
     return(invisible(teams_df))
 
   }, error = function(e) {
-    stop(sprintf("Failed to fetch nba teams: %s", e$message))
+    stop(sprintf("Failed to fetch mens_college_basketball teams: %s", e$message))
   })
 }
