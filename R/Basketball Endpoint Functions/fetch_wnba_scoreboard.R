@@ -1,4 +1,4 @@
-#' Fetch NBA scoreboard data using Site API
+#' Fetch wnba scoreboard data using Site API
 #'
 #' @param year Numeric. Season year (e.g., 2023, 2024).
 #' @param week Numeric. Week number. Optional.
@@ -9,17 +9,17 @@
 #' @export
 #'
 #' @examples
-#' # Get NBA scoreboard for current date
-#' fetch_nba_scoreboard()
-#' head(nba_scoreboard)
+#' # Get wnba scoreboard for current date
+#' fetch_wnba_scoreboard()
+#' head(wnba_scoreboard)
 #'
 #' # Get scoreboard for specific date
-#' fetch_nba_scoreboard(dates = "20241225")
+#' fetch_wnba_scoreboard(dates = "20241225")
 #'
 #' # Get raw data
-#' fetch_nba_scoreboard(raw = TRUE)
+#' fetch_wnba_scoreboard(raw = TRUE)
 #'
-fetch_nba_scoreboard <- function(year = NULL, week = NULL, seasontype = 2, dates = NULL, raw = FALSE) {
+fetch_wnba_scoreboard <- function(year = NULL, week = NULL, seasontype = 2, dates = NULL, raw = FALSE) {
 
   # Validate inputs
   if (!is.null(year) && (!is.numeric(year) || year < 1990 || year > as.numeric(format(Sys.Date(), "%Y")) + 2)) {
@@ -39,7 +39,7 @@ fetch_nba_scoreboard <- function(year = NULL, week = NULL, seasontype = 2, dates
   }
 
   # Build URL
-  base_url <- "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard"
+  base_url <- "https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/scoreboard"
 
   # Build query parameters
   query_params <- list()
@@ -64,7 +64,7 @@ fetch_nba_scoreboard <- function(year = NULL, week = NULL, seasontype = 2, dates
 
   # Fetch and parse
   tryCatch({
-    message("Fetching NBA scoreboard data...")
+    message("Fetching wnba scoreboard data...")
 
     resp <- httr::GET(url, httr::timeout(60))
 
@@ -79,26 +79,26 @@ fetch_nba_scoreboard <- function(year = NULL, week = NULL, seasontype = 2, dates
 
     # Handle raw data assignment
     if (isTRUE(raw)) {
-      assign("nba_scoreboard_raw", data, envir = .GlobalEnv)
-      message("Raw NBA scoreboard data assigned to: nba_scoreboard_raw")
+      assign("wnba_scoreboard_raw", data, envir = .GlobalEnv)
+      message("Raw wnba scoreboard data assigned to: wnba_scoreboard_raw")
       return(invisible(data))
     }
 
     # Create clean scoreboard dataset
-    scoreboard_df <- create_clean_nba_scoreboard_dataset(data, year, week, seasontype, dates)
+    scoreboard_df <- create_clean_wnba_scoreboard_dataset(data, year, week, seasontype, dates)
 
     # Assign to global environment
-    assign("nba_scoreboard", scoreboard_df, envir = .GlobalEnv)
-    message(sprintf("NBA scoreboard data assigned to: nba_scoreboard (%d games)", nrow(scoreboard_df)))
+    assign("wnba_scoreboard", scoreboard_df, envir = .GlobalEnv)
+    message(sprintf("wnba scoreboard data assigned to: wnba_scoreboard (%d games)", nrow(scoreboard_df)))
 
     return(invisible(scoreboard_df))
 
   }, error = function(e) {
-    stop(sprintf("Failed to fetch NBA scoreboard data: %s", e$message))
+    stop(sprintf("Failed to fetch wnba scoreboard data: %s", e$message))
   })
 }
 
-#' Create clean NBA scoreboard dataset from ESPN Site API response
+#' Create clean wnba scoreboard dataset from ESPN Site API response
 #'
 #' @param data Raw JSON response from ESPN Site API
 #' @param year Year parameter used in request (can be NULL)
@@ -106,7 +106,7 @@ fetch_nba_scoreboard <- function(year = NULL, week = NULL, seasontype = 2, dates
 #' @param seasontype Season type parameter used in request
 #' @param dates Dates parameter used in request (can be NULL)
 #' @return Clean data frame with one row per game
-create_clean_nba_scoreboard_dataset <- function(data, year, week, seasontype, dates) {
+create_clean_wnba_scoreboard_dataset <- function(data, year, week, seasontype, dates) {
 
   # Initialize result data frame
   result_df <- data.frame(
