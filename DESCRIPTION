@@ -1,14 +1,44 @@
 Package: esspenR
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Access ESPN API Data with Clean Data Frames
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Authors@R: 
+    person("Daniel", "Tomaro", 
+           email = "daniel.tomaro@icloud.com", 
+           role = c("aut", "cre"),
+           comment = c(ORCID = "YOUR-ORCID-ID"))
+Description: Provides access to ESPN's undocumented API endpoints, returning 
+    clean, structured data frames for sports data analysis. Covers multiple 
+    sports including NFL, NBA, MLB, NHL, college sports, and soccer. Functions 
+    extract and clean data from scoreboards, team information, player statistics, 
+    standings, news, and more. Users can choose between processed data frames 
+    (default) or raw JSON responses. Please note this uses unofficial APIs that 
+    may change without notice.
+License: MIT + file LICENSE
+URL: https://github.com/DanielTomaro13/esspenR
+BugReports: https://github.com/DanielTomaro13/esspenR/issues
 Encoding: UTF-8
 LazyData: true
+RoxygenNote: 7.3.2
+Depends: 
+    R (>= 4.0.0)
+Imports:
+    httr2 (>= 1.0.0),
+    jsonlite (>= 1.8.0),
+    dplyr (>= 1.1.0),
+    tibble (>= 3.2.0),
+    purrr (>= 1.0.0),
+    rlang (>= 1.1.0),
+    lubridate (>= 1.9.0),
+    stringr (>= 1.5.0),
+    glue (>= 1.6.0),
+    cli (>= 3.6.0)
 Suggests: 
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown,
+    covr,
+    mockery
 Config/testthat/edition: 3
+VignetteBuilder: knitr
+Roxygen: list(markdown = TRUE)
